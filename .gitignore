@@ -1,3 +1,7 @@
+# Directories to ignore:
+bin/
+obj/
+
 # Prerequisites
 *.d
 
