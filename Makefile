@@ -4,7 +4,7 @@ TARGET := dddmd
 
 CC       := gcc
 CSTD     := -std=c99
-CFLAGS   := -Wall -pedantic
+CFLAGS   := -Wall -Wextra -Wpedantic
 OPTIMIZE := -O0
 LINKER   := -lm
 
@@ -24,17 +24,21 @@ OBJ_FILE_PATHS := $(subst $(SRC_DIR),$(OBJ_DIR),$(SRC_FILE_PATHS:.c=.o))
 
 # recipes -------------------------------------------------------------------- #
 
+# Link object files into main binary.
 $(BIN_DIR)/$(TARGET): $(OBJ_FILE_PATHS)
+	@echo "  linking ..."
 	@mkdir -p $(BIN_DIR)
-	$(CC) $(CSTD) $(CFLAGS) $(OPTIMIZE) -o $@ $^ $(LINKER)
+	@$(CC) $(CSTD) $(CFLAGS) $(OPTIMIZE) -o $@ $^ $(LINKER)
 
+# Compile object files.
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CSTD) $(CFLAGS) $(OPTIMIZE) -c $^
+	@printf "  compiling %-20s => %s\n" "$<" "$@"
 	@mkdir -p $(OBJ_DIR)
-	@mv *.o $(OBJ_DIR)
+	@$(CC) $(CSTD) $(CFLAGS) $(OPTIMIZE) -o $@ -c $^
 
 # make commands -------------------------------------------------------------- #
 
+# Run the binary.
 .PHONY: run
 run:
 	@$(BIN_DIR)/$(TARGET)
@@ -45,7 +49,7 @@ debug:
 	@echo "SRC_FILE_PATHS: $(SRC_FILE_PATHS)"
 	@echo "OBJ_FILE_PATHS: $(OBJ_FILE_PATHS)"
 
-# Remove ./bin and ./obj directories
+# Remove ./bin and ./obj directories.
 .PHONY: clean
 clean:
 	@rm -r $(BIN_DIR)

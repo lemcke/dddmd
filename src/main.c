@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define DEBUG
 #define N 100 // number of particles
 
 int main(void)
@@ -27,7 +28,10 @@ int main(void)
 		pz = (double) rand() / (double) RAND_MAX;
 		vec3d_set(&positions[i], px, py, pz);
 		particle_init(&particles[i], mass, &positions[i]);
+
+		#ifdef DEBUG
 		particle_debug(&particles[i]);
+		#endif
 	}
 
 	return 0;

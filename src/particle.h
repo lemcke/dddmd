@@ -2,6 +2,7 @@
 #define PARTICLE_H
 
 #include "vec3d.h"
+#define DEBUG
 
 typedef struct PARTICLE particle_t;
 
@@ -13,7 +14,9 @@ struct PARTICLE {
 	 */
 };
 
+#ifdef DEBUG
 void particle_debug(particle_t *p);
+#endif
 void particle_init(particle_t *p, double mass, vec3d_t *pos);
 
 #endif // PARTICLE_H
