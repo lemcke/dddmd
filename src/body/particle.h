@@ -1,7 +1,7 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
-#include "vec3d.h"
+#include "../geometry/vec3d.h"
 #define DEBUG
 
 typedef struct PARTICLE particle_t;

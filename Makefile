@@ -19,8 +19,10 @@ SRC_DIR := ./src
 SRC_FILE_PATHS := $(shell find $(SRC_DIR) -type f -regex .*\.c)
 
 # object files
-# (Does `patsubst` have any advantages in this case?)
-OBJ_FILE_PATHS := $(subst $(SRC_DIR),$(OBJ_DIR),$(SRC_FILE_PATHS:.c=.o))
+OBJ_FILE_PATHS := $(addprefix $(OBJ_DIR)/,$(notdir $(SRC_FILE_PATHS:.c=.o)))
+
+# general search path for source files
+VPATH := $(shell find $(SRC_DIR) -type d)
 
 # recipes -------------------------------------------------------------------- #
 
@@ -31,8 +33,9 @@ $(BIN_DIR)/$(TARGET): $(OBJ_FILE_PATHS)
 	@$(CC) $(CSTD) $(CFLAGS) $(OPTIMIZE) -o $@ $^ $(LINKER)
 
 # Compile object files.
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@printf "  compiling %-20s => %s\n" "$<" "$@"
+# $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: %.c
+	@printf "  compiling %-25s => %s\n" "$<" "$@"
 	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CSTD) $(CFLAGS) $(OPTIMIZE) -o $@ -c $^
 
@@ -48,9 +51,10 @@ run:
 debug:
 	@echo "SRC_FILE_PATHS: $(SRC_FILE_PATHS)"
 	@echo "OBJ_FILE_PATHS: $(OBJ_FILE_PATHS)"
+	@echo "VPATH:          $(VPATH)"
 
 # Remove ./bin and ./obj directories.
 .PHONY: clean
 clean:
-	@rm -r $(BIN_DIR)
-	@rm -r $(OBJ_DIR)
+	rm -r $(OBJ_DIR)
+	rm -r $(BIN_DIR)

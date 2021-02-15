@@ -1,5 +1,5 @@
 #include "particle.h"
-#include "vec3d.h"
+#include "../geometry/vec3d.h"
 #include <stdio.h>
 
 #ifdef DEBUG
